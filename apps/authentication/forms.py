@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, SelectField
 from wtforms.validators import Email, DataRequired
 
 # login and registration
@@ -21,6 +21,13 @@ class CreateAccountForm(FlaskForm):
     email = StringField('Email',
                       id='email_create',
                       validators=[DataRequired(), Email()])
+    role = SelectField('Role',
+                    id='role_create',
+                    choices=[
+                        ('user', 'User'),
+                        ('wc_service','Waste Collection Service')
+                    ],
+                    validators=[DataRequired()])
     password = PasswordField('Password',
                              id='pwd_create',
                              validators=[DataRequired()])

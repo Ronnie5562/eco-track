@@ -103,6 +103,16 @@
 
       <li role="separator" class="dropdown-divider mt-2 mb-2 text-white"></li>
 
+      {% if current_user.role.value == 'user' %}
+      <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
+        <a href="/schedule_collection" class="nav-link">
+          <i class="bi bi-bookmark-fill me-2"></i>
+          <span class="sidebar-text">Collection schedule</span>
+        </a>
+      </li>
+      <li role="separator" class="dropdown-divider mt-2 mb-2 text-white"></li>
+      {% endif %}
+
       <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
         <a href="/me/notifications" class="nav-link">
           <i class="bi bi-bell-fill"></i>

@@ -1,4 +1,4 @@
-from flask import jsonify, render_template
+from flask import jsonify, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 from apps import db, login_manager
 from apps.collection_route import blueprint
@@ -6,28 +6,44 @@ from apps.collection_route.models import CollectionRoute
 from apps.collection_route.forms import CollectionRouteForm
 
 
-@blueprint.route('/collection_route', methods=['POST'])
+@blueprint.route('/create_route', methods=['GET', 'POST'])
 @login_required
 def create_collection_route():
-    if current_user.role != 'wc_service':
-        return jsonify({'error': 'Unauthorized access'}), 403
+    print(f"""
+
+        {current_user.role.value}
+
+    """)
+    if current_user.role.value != 'wc_service':
+        return render_template('error/page-403.html'), 403
 
     form = CollectionRouteForm()
     if form.validate_on_submit():
         collection_route = CollectionRoute(
-            service_id=current_user.id,  # Assuming the current user is the service
+            service_id=current_user.id,
             name=form.name.data,
             area=form.area.data,
             schedule=form.schedule.data
         )
         db.session.add(collection_route)
         db.session.commit()
-        return jsonify({'message': 'Collection route created successfully'}), 201
+        return redirect(url_for('collection_route_blueprint.view_routes'))
 
-    return jsonify({'error': 'Invalid data'}), 400
+    return render_template('dashboard/create_route.html', form=form)
 
+
+@blueprint.route('/view_routes')
+@login_required
+def view_routes():
+    if current_user.role.value != 'wc_service':
+        return render_template('error/page-403.html'), 403
+
+    routes = CollectionRoute.query.filter_by(service_id=current_user.id).all()
+    return render_template('dashboard/view_routes.html', routes=routes)
 
 # Error Pages
+
+
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return render_template('error/page-403.html'), 403

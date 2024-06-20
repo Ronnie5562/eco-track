@@ -21,7 +21,7 @@ def register_blueprints(app):
 
     # Register new blueprints for each app
     for module_name in (
-            'waste_management', 'collection_schedule', 'recycling_tracker', 'notification',  'dashboard'):
+            'waste_management', 'collection_schedule', 'recycling_tracker', 'notification',  'dashboard', 'collection_route'):
         module = import_module('apps.{}.routes'.format(module_name))
         # app.register_blueprint(module.blueprint, url_prefix='/' + module_name)
         app.register_blueprint(module.blueprint)

@@ -1,0 +1,30 @@
+<!-- view_routes.html -->
+{% extends "layouts/base.html" %}
+
+{% block title %}View Collection Routes{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Collection Routes</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Area</th>
+                <th>Schedule</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for route in routes %}
+            <tr>
+                <td>{{ route.name }}</td>
+                <td>{{ route.area }}</td>
+                <td>{{ route.schedule }}</td>
+                <td>{{ route.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

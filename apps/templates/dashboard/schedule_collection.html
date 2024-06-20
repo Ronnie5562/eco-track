@@ -1,0 +1,33 @@
+{% extends "layouts/base.html" %} {% block title %} Dashboard {% endblock %} {%
+block stylesheets %}{% endblock stylesheets %} {% block content %}
+<div class="" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title text-center">Waste Collection Schedule</h2>
+            </div>
+
+            <div class="modal-body">
+                <form
+                    id="collectionScheduleForm"
+                    method="POST"
+                    action="{{ url_for('collection_schedule_blueprint.schedule_collection') }}"
+                >
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label for="route_id">Route ID</label>
+                        {{ form.route_id(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="date">Date</label>
+                        {{ form.date(class="form-control") }}
+                    </div>
+                    <div class="modal-footer">
+                        <button style="background-color: #001d0e" type="submit" class="btn text-white">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} {% block javascripts %}{% endblock javascripts %}

@@ -1,24 +1,28 @@
-from flask import jsonify, render_template
+# routes.py
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from apps import db, login_manager
 from apps.collection_schedule import blueprint
-from apps.collection_schedule.models import CollectionSchedule
 from apps.collection_schedule.forms import CollectionScheduleForm
+from apps.collection_schedule.models import CollectionSchedule
 from apps.collection_route.models import CollectionRoute
 from apps.notification.utils import create_notification
 
 
-@blueprint.route('/collection_schedule', methods=['POST'])
+@blueprint.route('/schedule_collection', methods=['GET', 'POST'])
 @login_required
-def create_collection_schedule():
-    if current_user.role != 'user':
-        return jsonify({'error': 'Unauthorized access'}), 403
-
+def schedule_collection():
     form = CollectionScheduleForm()
+
+    # Fetch routes from the database
+    routes = CollectionRoute.query.all()
+    form.route_id.choices = [(route.id, route.name) for route in routes]
+
     if form.validate_on_submit():
         collection_route = CollectionRoute.query.get(form.route_id.data)
         if not collection_route:
-            return jsonify({'error': 'Invalid route ID'}), 400
+            flash('Invalid route ID', 'danger')
+            return render_template('collection_schedule/schedule_collection.html', form=form)
 
         collection_schedule = CollectionSchedule(
             user_id=current_user.id,
@@ -30,11 +34,14 @@ def create_collection_schedule():
 
         # Create a notification for the wc_service
         message = f'New collection schedule created by user {current_user.username} for route {collection_route.name} on {form.date.data.strftime("%Y-%m-%d")}'
-        create_notification(user_id=collection_route.service_id, message=message)
+        create_notification(
+            user_id=collection_route.service_id, message=message)
 
-        return jsonify({'message': 'Collection schedule created successfully'}), 201
+        flash('Collection schedule created successfully', 'success')
+        return redirect(url_for('collection_schedule_blueprint.schedule_collection'))
 
-    return jsonify({'error': 'Invalid data'}), 400
+    return render_template('dashboard/schedule_collection.html', form=form)
+
 
 
 # Error Pages

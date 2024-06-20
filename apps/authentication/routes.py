@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, flash
 from flask_login import (
     current_user,
     login_user,
@@ -8,7 +8,7 @@ from flask_login import (
 
 from apps import db, login_manager
 from apps.authentication import blueprint
-from apps.authentication.forms import LoginForm, CreateAccountForm
+from apps.authentication.forms import LoginForm, CreateAccountForm, UpdateProfileForm
 from apps.authentication.models import Users
 from apps.authentication.util import verify_pass
 
@@ -30,13 +30,13 @@ def login():
             # return redirect(url_for('authentication_blueprint.route_default'))
 
         return render_template(
-            'accounts/login.html',
+            'authentication/login.html',
             msg='Wrong user or password',
             form=login_form
         )
 
     if not current_user.is_authenticated:
-        return render_template('accounts/login.html',form=login_form)
+        return render_template('authentication/login.html', form=login_form)
     return redirect(url_for('home_blueprint.index'))
 
 
@@ -52,7 +52,7 @@ def register():
         user = Users.query.filter_by(username=username).first()
         if user:
             return render_template(
-                'accounts/register.html',
+                'authentication/register.html',
                 msg='Username already registered',
                 success=False,
                 form=create_account_form
@@ -62,7 +62,7 @@ def register():
         user = Users.query.filter_by(email=email).first()
         if user:
             return render_template(
-                'accounts/register.html',
+                'authentication/register.html',
                 msg='Email already registered',
                 success=False,
                 form=create_account_form
@@ -77,24 +77,41 @@ def register():
         logout_user()
 
         return render_template(
-            'accounts/register.html',
+            'authentication/register.html',
             msg='Account created successfully.',
             success=True,
             form=create_account_form
         )
 
     else:
-        return render_template('accounts/register.html', form=create_account_form)
+        return render_template('authentication/register.html', form=create_account_form)
 
-@blueprint.route('/profile')
+
+@blueprint.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
+    form = UpdateProfileForm(obj=current_user)
+
+    if form.validate_on_submit():
+        current_user.firstname = form.firstname.data
+        current_user.lastname = form.lastname.data
+        current_user.phone = form.phone.data
+        current_user.address = form.address.data
+        current_user.city = form.city.data
+        current_user.state = form.state.data
+        current_user.zip_code = form.zip_code.data
+        db.session.commit()
+        flash('Your profile has been updated!', 'success')
+        return redirect(url_for('authentication_blueprint.profile'))
+
     segment = get_segment(request)
     return render_template(
-        'accounts/profile.html',
+        'dashboard/profile.html',
         segment=segment,
         current_user=current_user,
+        form=form
     )
+
 
 @blueprint.route('/logout')
 def logout():
@@ -117,13 +134,16 @@ def get_segment(request):
 def unauthorized_handler():
     return render_template('error/page-403.html'), 403
 
+
 @blueprint.errorhandler(403)
 def access_forbidden(error):
     return render_template('error/page-403.html'), 403
 
+
 @blueprint.errorhandler(404)
 def not_found_error(error):
     return render_template('error/page-404.html'), 404
+
 
 @blueprint.errorhandler(500)
 def internal_error(error):

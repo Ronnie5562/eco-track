@@ -1,26 +1,34 @@
 <!-- create_route.html -->
 {% extends "layouts/base.html" %} {% block title %}Create Collection Route{%
 endblock %} {% block content %}
-<div class="container mt-5">
-  <h2>Create Collection Route</h2>
-  <form
-    method="POST"
-    action="{{ url_for('collection_route_blueprint.create_collection_route') }}"
-  >
-    {{ form.hidden_tag() }}
-    <div class="mb-3">
-      <label for="name">Name</label>
-      {{ form.name(class="form-control") }}
+<div class="" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      <h2 class="h6 modal-title text-center">Create Collection Route</h2>
+      </div>
+        <div class="modal-body">
+            <form
+              method="POST"
+              action="{{ url_for('collection_route_blueprint.create_collection_route') }}"
+            >
+              {{ form.hidden_tag() }}
+              <div class="mb-3">
+                <label for="name">Name</label>
+                {{ form.name(class="form-control") }}
+              </div>
+              <div class="mb-3">
+                <label for="area">Area</label>
+                {{ form.area(class="form-control") }}
+              </div>
+              <div class="mb-3">
+                <label for="schedule">Schedule</label>
+                {{ form.schedule(class="form-control") }}
+              </div>
+              <button type="submit" class="btn btn-primary">Create Route</button>
+            </form>
+        </div>
     </div>
-    <div class="mb-3">
-      <label for="area">Area</label>
-      {{ form.area(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      <label for="schedule">Schedule</label>
-      {{ form.schedule(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary">Create Route</button>
-  </form>
+  </div>
 </div>
 {% endblock %}

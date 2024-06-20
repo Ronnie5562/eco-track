@@ -3,22 +3,43 @@ from flask_login import login_required, current_user
 from apps.dashboard import blueprint
 from apps import login_manager
 
+from apps.authentication.models import Users
+from apps.collection_route.models import CollectionRoute
+from apps.collection_schedule.models import CollectionSchedule
+from apps.recycling_tracker.models import RecyclingTracker
+from apps.waste_management.models import WasteType
+
 
 @blueprint.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
+    context = {}
     segment = get_segment(request)
     if current_user.role.value == 'user':
         template = 'dashboard/user_dashboard.html'
+        context = {
+
+        }
     elif current_user.role.value == 'wc_service':
         template = 'dashboard/wc_service_dashboard.html'
+        context = {
+
+        }
     elif current_user.role.value == 'admin':
         template = 'dashboard/admin_dashboard.html'
+        results = RecyclingTracker.query.all()
+        total_weight = sum([tracker.weight for tracker in results])
+        context = {
+            'total_wastes_recycled': RecyclingTracker.query.count(),
+            'total_waste_weight': total_weight,
+            'number_of_waste_types': WasteType.query.count(),
+            'list_of_all_users': list(Users.query.all())
+        }
     else:
         flash('Role not recognized!', 'danger')
         return redirect(url_for('authentication_blueprint.login'))
 
-    return render_template(template, segment=segment)
+    return render_template(template, segment=segment, context=context)
 
 
 def get_segment(request):

@@ -1,4 +1,4 @@
-from flask import render_template, jsonify
+from flask import render_template, jsonify, request
 from flask_login import login_required, current_user
 from apps import db, login_manager
 from apps.notification import blueprint
@@ -9,7 +9,12 @@ from apps.notification.models import Notification
 @login_required
 def get_notifications():
     notifications = Notification.query.filter_by(user_id=current_user.id).all()
-    return render_template('dashboard/notification.html', notifications=notifications)
+    segment = get_segment(request)
+    return render_template(
+        'dashboard/notification.html',
+        segment=segment,
+        notifications=notifications
+    )
 
 
 @blueprint.route('/notifications/<int:id>/read', methods=['POST'])
@@ -22,6 +27,16 @@ def mark_as_read(id):
     notification.read = True
     db.session.commit()
     return jsonify({'message': 'Notification marked as read'})
+
+
+def get_segment(request):
+    try:
+        segment = request.path.split('/')[-1]
+        if segment == '':
+            segment = 'index'
+        return segment
+    except:
+        return None
 
 
 # Error Pages

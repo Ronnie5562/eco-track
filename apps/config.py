@@ -22,9 +22,7 @@ class Config(object):
 
     # try to set up a Relational DBMS
     if DB_ENGINE and DB_NAME and DB_USERNAME:
-
         try:
-
             # Relational DBMS: PSQL, MySql
             SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
                 DB_ENGINE,
@@ -43,34 +41,19 @@ class Config(object):
             print('> Fallback to SQLite ')
 
     if USE_SQLITE:
-
         # This will create a file in <app> FOLDER
         SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
-
     # Assets Management
     ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
-
-    SOCIAL_AUTH_GITHUB  = False
-
-    GITHUB_ID      = os.getenv('GITHUB_ID')
-    GITHUB_SECRET  = os.getenv('GITHUB_SECRET')
-
-    # Enable/Disable Github Social Login
-    if GITHUB_ID and GITHUB_SECRET:
-         SOCIAL_AUTH_GITHUB  = True
-
 class ProductionConfig(Config):
     DEBUG = False
-
     # Security
     SESSION_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_DURATION = 3600
 
-
 class DebugConfig(Config):
     DEBUG = True
-
 
 # Load all possible configurations
 config_dict = {

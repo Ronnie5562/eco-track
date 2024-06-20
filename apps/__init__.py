@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
 
-
 db = SQLAlchemy()
 login_manager = LoginManager()
 
@@ -15,25 +14,30 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
+    # Register existing blueprints (authentication and home)
     for module_name in ('authentication', 'home'):
         module = import_module('apps.{}.routes'.format(module_name))
         app.register_blueprint(module.blueprint)
 
+    # Register new blueprints for each app
+    for module_name in (
+            'waste_management', 'collection_schedule', 'recycling_tracker', 'notification',  'dashboard'):
+        module = import_module('apps.{}.routes'.format(module_name))
+        # app.register_blueprint(module.blueprint, url_prefix='/' + module_name)
+        app.register_blueprint(module.blueprint)
+
 
 def configure_database(app):
-
     @app.before_first_request
     def initialize_database():
         try:
             db.create_all()
         except Exception as e:
-
-            print('> Error: DBMS Exception: ' + str(e) )
-
+            print('> Error: DBMS Exception: ' + str(e))
             # fallback to SQLite
             basedir = os.path.abspath(os.path.dirname(__file__))
-            app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
-
+            app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+                os.path.join(basedir, 'db.sqlite3')
             print('> Fallback to SQLite ')
             db.create_all()
 

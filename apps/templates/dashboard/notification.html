@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+{% block title %} Notifications {% endblock %}
+
+{% block stylesheets %}
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd"
+    crossorigin="anonymous"
+/>
+{% endblock stylesheets %}
+
+{% block content %}
+<div>
+    <h2>Notifications</h2>
+</div>
+<div class="card border-0 shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0 rounded">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="border-0 rounded-start">#</th>
+                        <th class="border-0">Sender</th>
+                        <th class="border-0">Message</th>
+                        <th class="border-0">Time</th>
+                        <th class="border-0"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="#" class="text-primary fw-bold">1</a> </td>
+                        <td class="fw-bolder d-flex align-items-center">
+                            <i class="bi bi-person-fill me-2"></i>
+                            Ronald <a class="mx-2" href="mailto:abimbolaronald@gmail.com"><i class="bi bi-box-arrow-up-right"></i></a> | Admin
+                        </td>
+                        <td>
+                            Check you email | trancate 20
+                        </td>
+                        <td>
+                            <span class="text-muted">2 hours ago</span>
+                        </td>
+                        <td>
+                            --
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

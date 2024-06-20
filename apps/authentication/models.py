@@ -37,10 +37,8 @@ class Users(db.Model, UserMixin):
         for property, value in kwargs.items():
             if hasattr(value, '__iter__') and not isinstance(value, str):
                 value = value[0]
-
             if property == 'password':
                 value = hash_pass(value)
-
             setattr(self, property, value)
 
     def __repr__(self):

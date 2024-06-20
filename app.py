@@ -15,7 +15,6 @@ get_config_mode = 'Debug' if DEBUG else 'Production'
 try:
     # Load the configuration using the default values
     app_config = config_dict[get_config_mode.capitalize()]
-
 except KeyError:
     exit('Error: Invalid <config_mode>. Expected values [Debug, Production] ')
 

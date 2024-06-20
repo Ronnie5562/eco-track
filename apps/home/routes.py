@@ -1,50 +1,30 @@
 from apps.home import blueprint
-from flask import render_template, request
-from flask_login import login_required, current_user
-from jinja2 import TemplateNotFound
+from flask import render_template
+from flask_login import current_user
+from apps import login_manager
 
 
-@blueprint.route('/index')
-@login_required
+@blueprint.route('/')
 def index():
-
-    return render_template('home/index.html',
-                           segment='index',
-                           user_id=current_user.id)
-
-@blueprint.route('/<template>')
-@login_required
-def route_template(template):
-
-    try:
-
-        if not template.endswith('.html'):
-            template += '.html'
-
-        # Detect the current page
-        segment = get_segment(request)
-
-        # Serve the file (if exists) from app/templates/home/FILE.html
-        return render_template("home/" + template, segment=segment)
-
-    except TemplateNotFound:
-        return render_template('home/page-404.html'), 404
-
-    except:
-        return render_template('home/page-500.html'), 500
+    return render_template('home/index.html', current_user=current_user)
 
 
-# Helper - Extract current page name from request
-def get_segment(request):
+# Error Pages
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return render_template('error/page-403.html'), 403
 
-    try:
 
-        segment = request.path.split('/')[-1]
+@blueprint.errorhandler(403)
+def access_forbidden(error):
+    return render_template('error/page-403.html'), 403
 
-        if segment == '':
-            segment = 'index'
 
-        return segment
+@blueprint.errorhandler(404)
+def not_found_error(error):
+    return render_template('error/page-404.html'), 404
 
-    except:
-        return None
+
+@blueprint.errorhandler(500)
+def internal_error(error):
+    return render_template('error/page-500.html'), 500

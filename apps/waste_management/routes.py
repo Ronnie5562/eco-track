@@ -9,15 +9,14 @@ from apps.waste_management.forms import WasteTypeForm
 @blueprint.route('/waste_type', methods=['GET', 'POST'])
 @login_required
 def create_waste_type():
-    if current_user.role != 'admin':
-        return jsonify({'error': 'Unauthorized access'}), 403
+    # if current_user.role.value != 'admin':
+    #     return jsonify({'error': 'Unauthorized access'}), 403
 
     form = WasteTypeForm()
     if form.validate_on_submit():
         waste_type = WasteType(
             name=form.name.data,
             description=form.description.data,
-            created_by=current_user.id
         )
         db.session.add(waste_type)
         db.session.commit()

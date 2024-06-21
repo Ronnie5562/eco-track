@@ -1,30 +1,45 @@
 <!-- view_routes.html -->
 {% extends "layouts/base.html" %}
-
 {% block title %}View Collection Routes{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-white">Collection Routes</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Area</th>
-                <th>Schedule</th>
-                <th>Created At</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for route in routes %}
-            <tr>
-                <td>{{ route.name }}</td>
-                <td>{{ route.area }}</td>
-                <td>{{ route.schedule }}</td>
-                <td>{{ route.created_at }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="row">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-12 mb-4">
+        <div class="card border-0 shadow">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h2 class="fs-5 fw-bold mb-0">Collection Routes</h2>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th class="border-bottom" scope="col">Name</th>
+                  <th class="border-bottom" scope="col">Area</th>
+                  <th class="border-bottom" scope="col">Schedule</th>
+                  <th class="border-bottom" scope="col">Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for route in routes %}
+                <tr>
+                  <th class="text-gray-900" scope="row">{{ route.name }}</th>
+                  <td class="fw-bolder text-gray-500">{{ route.area }}</td>
+                  <td class="fw-bolder text-gray-500">{{ route.schedule }}</td>
+                <td class="fw-bolder text-gray-500">{{ route.created_at }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

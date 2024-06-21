@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Create Recycling Tracker{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Create Recycling Tracker</h2>
+    <form method="POST" action="{{ url_for('recycling_tracker_blueprint.create_recycling_tracker') }}">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            <label for="user_id">User</label>
+            {{ form.user_id(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            <label for="waste_type_id">Waste Type</label>
+            {{ form.waste_type_id(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            <label for="date_collected">Date Collected</label>
+            {{ form.date_collected(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            <label for="weight">Weight (kg)</label>
+            {{ form.weight(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

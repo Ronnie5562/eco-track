@@ -9,11 +9,6 @@ from apps.collection_route.forms import CollectionRouteForm
 @blueprint.route('/create_route', methods=['GET', 'POST'])
 @login_required
 def create_collection_route():
-    print(f"""
-
-        {current_user.role.value}
-
-    """)
     if current_user.role.value != 'wc_service':
         return render_template('error/page-403.html'), 403
 

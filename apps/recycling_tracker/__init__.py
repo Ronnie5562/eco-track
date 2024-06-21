@@ -1,7 +1,7 @@
 from flask import Blueprint
 
 blueprint = Blueprint(
-    'recycling_tracker',
+    'recycling_tracker_blueprint',
     __name__,
     url_prefix=''
 )

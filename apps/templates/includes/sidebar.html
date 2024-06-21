@@ -133,6 +133,16 @@
       <li role="separator" class="dropdown-divider mt-2 mb-2 text-white"></li>
       {% endif %}
 
+      {% if current_user.role.value == 'wc_service' %}
+      <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
+        <a href="/recycling_tracker" class="nav-link">
+          <i class="bi bi-book-fill me-2"></i>
+          <span class="sidebar-text">Recycling Tracker </span>
+        </a>
+      </li>
+      <li role="separator" class="dropdown-divider mt-2 mb-2 text-white"></li>
+      {% endif %}
+
       <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
         <a href="/me/notifications" class="nav-link">
           <i class="bi bi-bell-fill"></i>

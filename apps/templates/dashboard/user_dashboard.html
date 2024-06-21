@@ -24,13 +24,13 @@ block stylesheets %}{% endblock stylesheets %}
             </div>
             <div class="d-sm-none">
               <h2 class="h5">Wastes Disposed</h2>
-              <h3 class="fw-extrabold mb-1">1000</h3>
+              <h3 class="fw-extrabold mb-1">{{ context.waste_disposed_count }}</h3>
             </div>
           </div>
           <div class="col-12 col-xl-7 px-xl-0">
             <div class="d-none d-sm-block">
               <h2 class="h6 text-gray-400 mb-0">Wastes Disposed</h2>
-              <h3 class="fw-extrabold mb-2">1000</h3>
+              <h3 class="fw-extrabold mb-2">{{ context.waste_disposed_count }}</h3>
             </div>
           </div>
         </div>
@@ -61,13 +61,13 @@ block stylesheets %}{% endblock stylesheets %}
             </div>
             <div class="d-sm-none">
               <h2 class="fw-extrabold h5">Total Weight Recycled</h2>
-              <h3 class="mb-1">594 KG</h3>
+              <h3 class="mb-1">{{ context.total_waste_recycled }}</h3>
             </div>
           </div>
           <div class="col-12 col-xl-7 px-xl-0">
             <div class="d-none d-sm-block">
               <h2 class="h6 text-gray-400 mb-0">Total Weight Recycled</h2>
-              <h3 class="fw-extrabold mb-2">594 KG</h3>
+              <h3 class="fw-extrabold mb-2">{{ context.total_waste_recycled }}</h3>
             </div>
           </div>
         </div>
@@ -97,13 +97,13 @@ block stylesheets %}{% endblock stylesheets %}
             </div>
             <div class="d-sm-none">
               <h2 class="fw-extrabold h5">Waste Types Recycled</h2>
-              <h3 class="mb-1">12</h3>
+              <h3 class="mb-1">{{ context.waste_types }}</h3>
             </div>
           </div>
           <div class="col-12 col-xl-7 px-xl-0">
             <div class="d-none d-sm-block">
               <h2 class="h6 text-gray-400 mb-0">Waste Types Recycled</h2>
-              <h3 class="fw-extrabold mb-2">12</h3>
+              <h3 class="fw-extrabold mb-2">{{ context.waste_types }}</h3>
             </div>
           </div>
         </div>
@@ -134,12 +134,14 @@ block stylesheets %}{% endblock stylesheets %}
                 </tr>
               </thead>
               <tbody>
+                {% for recycle in context.my_recent_recycles %}
                 <tr>
-                  <th class="text-gray-900" scope="row">Ronald</th>
-                  <td class="fw-bolder text-gray-500">Plastic</td>
-                  <td class="fw-bolder text-gray-500">2</td>
-                  <td class="fw-bolder text-gray-500">	2024-06-20 17:10:23</td>
+                   <th class="text-gray-900" scope="row">{{ recycle.user }}</th>
+                  <td class="fw-bolder text-gray-500">{{ recycle.waste_type }}</td>
+                  <td class="fw-bolder text-gray-500">{{ recycle.weight }}</td>
+                  <td class="fw-bolder text-gray-500">{{ recycle.date_collected }}</td>
                 </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>

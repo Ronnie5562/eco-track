@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from apps.dashboard import blueprint
-from apps import login_manager
+from apps import db, login_manager
 
 from apps.authentication.models import Users
 from apps.collection_route.models import CollectionRoute
@@ -17,18 +17,39 @@ def dashboard():
     segment = get_segment(request)
     if current_user.role.value == 'user':
         template = 'dashboard/user_dashboard.html'
-        context = {
 
+        results = RecyclingTracker.query.filter_by(
+            user_id=current_user.id
+        ).all()
+        total_weight = sum([tracker.weight for tracker in results])
+
+        context = {
+            'waste_disposed_count': RecyclingTracker.query.filter_by(user_id=current_user.id).count(),
+            'total_waste_recycled': total_weight,
+            'waste_types': WasteType.query.count(),
+            'my_recent_recycles': RecyclingTracker.query.filter_by(user_id=current_user.id).order_by(RecyclingTracker.date_collected.desc()).limit(5).all()
         }
     elif current_user.role.value == 'wc_service':
         template = 'dashboard/wc_service_dashboard.html'
-        context = {
 
+        results = RecyclingTracker.query.filter_by(
+            service_id=current_user.id
+        ).all()
+        total_weight = sum([tracker.weight for tracker in results])
+
+        context = {
+            'total_wastes_recycled': RecyclingTracker.query.filter_by(
+                service_id=current_user.id
+            ).count(),
+            'total_waste_weight': total_weight,
+            'number_of_waste_types': WasteType.query.count(),
+            'recent_recycles': results
         }
     elif current_user.role.value == 'admin':
         template = 'dashboard/admin_dashboard.html'
         results = RecyclingTracker.query.all()
         total_weight = sum([tracker.weight for tracker in results])
+
         context = {
             'total_wastes_recycled': RecyclingTracker.query.count(),
             'total_waste_weight': total_weight,

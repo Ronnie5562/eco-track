@@ -26,7 +26,7 @@ def dashboard():
         context = {
             'waste_disposed_count': RecyclingTracker.query.filter_by(user_id=current_user.id).count(),
             'total_waste_recycled': total_weight,
-            'waste_types': WasteType.query.count(),
+            'waste_types': RecyclingTracker.query.filter_by(user_id=current_user.id).distinct(RecyclingTracker.waste_type).count(),
             'my_recent_recycles': RecyclingTracker.query.filter_by(user_id=current_user.id).order_by(RecyclingTracker.date_collected.desc()).limit(5).all()
         }
     elif current_user.role.value == 'wc_service':
@@ -54,11 +54,14 @@ def dashboard():
             'total_wastes_recycled': RecyclingTracker.query.count(),
             'total_waste_weight': total_weight,
             'number_of_waste_types': WasteType.query.count(),
-            'list_of_all_users': list(Users.query.all())
+            'list_of_all_users': Users.query.all(),
+            'waste_types': WasteType.query.all(),
         }
     else:
         flash('Role not recognized!', 'danger')
         return redirect(url_for('authentication_blueprint.login'))
+
+    print(context)
 
     return render_template(template, segment=segment, context=context)
 

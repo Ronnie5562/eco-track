@@ -55,14 +55,14 @@
               </svg>
             </div>
             <div class="d-sm-none">
-              <h2 class="h5">Wastes Types</h2>
-              <h3 class="fw-extrabold mb-1">{{ context.number_of_waste_types }}</h3>
+              <h2 class="h5">Total Wastes Recycled</h2>
+              <h3 class="fw-extrabold mb-1">{{ context.total_wastes_recycled }}</h3>
             </div>
           </div>
           <div class="col-12 col-xl-7 px-xl-0">
             <div class="d-none d-sm-block">
-              <h2 class="h6 text-gray-400 mb-0">Wastes Types</h2>
-              <h3 class="fw-extrabold mb-2">{{ context.number_of_waste_types }}</h3>
+              <h2 class="h6 text-gray-400 mb-0">Total Wastes Recycled</h2>
+              <h3 class="fw-extrabold mb-2">{{ context.total_wastes_recycled }}</h3>
             </div>
           </div>
         </div>
@@ -129,13 +129,13 @@
             </div>
             <div class="d-sm-none">
               <h2 class="fw-extrabold h5">Waste Types Recycled</h2>
-              <h3 class="mb-1">{{ context.total_wastes_recycled }}</h3>
+              <h3 class="mb-1">{{ context.number_of_waste_types }}</h3>
             </div>
           </div>
           <div class="col-12 col-xl-7 px-xl-0">
             <div class="d-none d-sm-block">
               <h2 class="h6 text-gray-400 mb-0">Waste Types Recycled</h2>
-              <h3 class="fw-extrabold mb-2">{{ context.total_wastes_recycled }}</h3>
+              <h3 class="fw-extrabold mb-2">{{ context.number_of_waste_types }}</h3>
             </div>
           </div>
         </div>
@@ -154,9 +154,9 @@
                                 <h2 class="fs-5 fw-bold mb-0">User List</h2>
                             </div>
                             <div class="col-6 d-flex gap-2">
-                                <h6 class="fw-bold m-0 px-2 py-0 border-end">20 Users</h6>
-                                <h6 class="fw-bold m-0 px-2 py-0 border-end">5 WC Services</h6>
-                                <h6 class="fw-bold m-0 px-2 py-0">2 Admins</h6>
+                              <!--<h6 class="fw-bold m-0 px-2 py-0 border-end">20 Users</h6>
+                              <h6 class="fw-bold m-0 px-2 py-0 border-end">5 WC Services</h6>
+                              <h6 class="fw-bold m-0 px-2 py-0">2 Admins</h6>-->
                             </div>
                             <div class="col-3 text-end">
                                 <a href="#" class="btn btn-sm btn-primary">See all</a>
@@ -175,19 +175,21 @@
                             </tr>
                             </thead>
                             <tbody>
+                            {% for user in context.list_of_all_users %}
                             <tr>
                                 <th class="text-gray-900" scope="row">
-                                    1
+                                  {{ user.id }}
                                 </th>
                                 <th class="text-gray-900" scope="row">
-                                    Ronald
+                                  {{ user.username }}
                                 </th>
                                 <td class="fw-bolder text-gray-500">
-                                    abimbolaronald@gmail.com
+                                  {{ user.email }}
                                 </td>
                                 <td class="fw-bolder text-gray-500">
-                                    Admin
+                                  {{ user.role.value }}
                                 </td>
+
                                 <td class="fw-bolder text-gray-500">
                                     <div class="col">
                                         <div class="py-4">
@@ -217,6 +219,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -232,14 +235,15 @@
                         <h2 class="fs-5 fw-bold mb-0">Wastes tracker</h2>
                     </div>
                     <div class="card-body">
+                      {% for waste_type in context.waste_types %}
                         <div class="row mb-4">
                             <div class="col-auto">
-                                <svg class="icon icon-sm text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                              <svg class="icon icon-sm text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
                             </div>
                             <div class="col">
                                 <div class="progress-wrapper">
                                     <div class="progress-info">
-                                        <div class="h6 mb-0">Plastics</div>
+                                        <div class="h6 mb-0">{{ waste_type.name }}</div>
                                         <div class="small fw-bold text-gray-500"><span>28 %</span></div>
                                     </div>
                                     <div class="progress mb-0">
@@ -248,6 +252,7 @@
                                 </div>
                             </div>
                         </div>
+                      {% endfor %}
                     </div>
                 </div>
             </div>

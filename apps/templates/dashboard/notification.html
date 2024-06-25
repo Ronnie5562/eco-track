@@ -30,11 +30,7 @@
                 <tbody>
                     {% for notification in notifications %}
                     <tr>
-                        <td><a href="#" class="text-primary fw-bold">1</a> </td>
-                        <!--<td class="fw-bolder d-flex align-items-center">
-                            <i class="bi bi-person-fill me-2"></i>
-                            notification. <a class="mx-2" href="mailto:abimbolaronald@gmail.com"><i class="bi bi-box-arrow-up-right"></i></a> | Admin
-                        </td>-->
+                        <td><a href="#" class="text-primary fw-bold">{{ loop.index }}</a> </td>
                         <td>
                             {{ notification.message|truncate(50, True, '...') }}
                         </td>
